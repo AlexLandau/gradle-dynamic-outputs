@@ -17,6 +17,7 @@ def getFolderCanaries() {
     return files {
         def generatedFolder = file("generated")
         def listOfFiles = []
+        println "Recalculating the list of canary files"
         if (generatedFolder.exists()) {
             generatedFolder.eachDir { subfolder ->
                 listOfFiles.add(new File(subfolder, "canary"))
