@@ -1,0 +1,14 @@
+task theTask {
+    inputs.file 'foldersToGenerate'
+    outputs.files getFolderCanaries()
+    doLast {
+        def lines = file('foldersToGenerate').lines()
+        for (line in lines) {
+            println("Here's a folder to generate: ${line}")
+        }
+    }
+}
+
+def getFolderCanaries() {
+
+}
