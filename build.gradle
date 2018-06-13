@@ -2,13 +2,26 @@ task theTask {
     inputs.file 'foldersToGenerate'
     outputs.files getFolderCanaries()
     doLast {
-        def lines = file('foldersToGenerate').lines()
+        def lines = file('foldersToGenerate').readLines()
         for (line in lines) {
-            println("Here's a folder to generate: ${line}")
+            println("Generating the folder ${line}")
+            def outputLocation = file("generated/$line")
+            outputLocation.mkdirs()
+            new File(outputLocation, "canary").setText("Watch me!")
+            new File(outputLocation, "ignorable").setText("This stands in for a bunch of files that are really long and won't change unless the canary also changes, so we're better off just tracking the canary as output, which is why we can't just track at the directory level of granularity")
         }
     }
 }
 
 def getFolderCanaries() {
-
+    return files {
+        def generatedFolder = file("generated")
+        def listOfFiles = []
+        if (generatedFolder.exists()) {
+            generatedFolder.eachDir { subfolder ->
+                listOfFiles.add(new File(subfolder, "canary"))
+            }
+        }
+        listOfFiles
+    }
 }
